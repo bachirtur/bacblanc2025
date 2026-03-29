@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bac Blanc NSI 2025 — École Internationale de Tunis</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root{--bg:#f0f2f5;--card:#fff;--primary:#c0392b;--accent:#2c3e50;--success:#27ae60;--danger:#e74c3c;--warning:#f39c12;--text:#2c3e50;--tl:#7f8c8d;--border:#dfe6e9;--cbg:#282a36;--rad:12px;--sh:0 4px 20px rgba(0,0,0,.06)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;user-select:none}
+.hdr{background:linear-gradient(135deg,#c0392b,#2c3e50);color:#fff;padding:14px 22px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(192,57,43,.3)}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.hdr h1{font-size:1.1rem;font-weight:700}
+.hdr .sub{opacity:.85;font-size:.74rem}
+.tmr{background:rgba(255,255,255,.15);border-radius:9px;padding:7px 16px;text-align:center;backdrop-filter:blur(5px)}
+.tmr .t{font-size:1.3rem;font-weight:700;font-variant-numeric:tabular-nums}
+.tmr .l{font-size:.6rem;text-transform:uppercase;letter-spacing:1px;opacity:.8}
+.tmr.w .t{color:#f39c12;animation:p 1s infinite}
+.tmr.d .t{color:#ff7675;animation:p .5s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.5}}
+.cheat-info{display:flex;align-items:center;gap:8px}
+.cheat-counter{background:rgba(255,255,255,.2);padding:4px 10px;border-radius:8px;font-size:.72rem}
+.cheat-counter.alert{background:rgba(231,76,60,.5);animation:p .5s infinite}
+.sv{font-size:.68rem;opacity:.8;display:flex;align-items:center;gap:3px}
+.sv .dot{width:6px;height:6px;border-radius:50%;background:var(--success);display:inline-block}
+.tabs{display:flex;gap:0;background:#fff;border-bottom:2px solid var(--border);padding:0 10px;overflow-x:auto;box-shadow:var(--sh)}
+.tab{padding:10px 15px;cursor:pointer;border:none;background:none;font-size:.78rem;font-weight:600;color:var(--tl);position:relative;transition:.3s;white-space:nowrap}
+.tab:hover{color:var(--primary)}
+.tab.active{color:var(--primary)}
+.tab.active::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:3px;background:var(--primary);border-radius:3px 3px 0 0}
+.tab .b{background:var(--primary);color:#fff;border-radius:14px;padding:1px 7px;font-size:.6rem;margin-left:4px}
+.tab.done .b{background:var(--success)}
+.ctn{max-width:1020px;margin:0 auto;padding:14px}
+.pnl{display:none}.pnl.active{display:block}
+.exh{background:var(--card);border-radius:var(--rad);padding:18px;margin-bottom:12px;box-shadow:var(--sh);border-left:4px solid var(--primary)}
+.exh h2{font-size:1.05rem;color:var(--primary);margin-bottom:2px}
+.exh .th{font-style:italic;color:var(--tl);font-size:.8rem}
+.exh .pb{display:inline-block;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;padding:3px 11px;border-radius:14px;font-size:.7rem;font-weight:600;margin-top:5px}
+.ctx{background:var(--card);border-radius:var(--rad);padding:14px 18px;margin-bottom:12px;box-shadow:var(--sh);font-size:.82rem;border:1px solid var(--border)}
+.ctx code{background:#fadbd8;padding:1px 4px;border-radius:3px;font-family:'Fira Code',monospace;font-size:.76rem;color:#c0392b}
+.ctx pre{background:var(--cbg);color:#f8f8f2;padding:10px;border-radius:7px;overflow-x:auto;font-size:.76rem;margin:5px 0}
+.ctx pre code{background:none;color:inherit}
+.ctx table{border-collapse:collapse;width:100%;margin:5px 0;font-size:.74rem}
+.ctx th,.ctx td{border:1px solid #bbb;padding:3px 6px;text-align:center}
+.ctx th{background:#fadbd8;font-weight:600;color:var(--primary)}
+.qc{background:var(--card);border-radius:var(--rad);padding:16px;margin-bottom:10px;box-shadow:var(--sh);border:2px solid transparent;transition:.3s}
+.qc:hover{border-color:rgba(192,57,43,.1)}
+.qc.ok{border-color:var(--success);background:#eafaf1}
+.qc.ko{border-color:var(--danger);background:#fdedec}
+.qt{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;gap:7px}
+.qn{background:var(--primary);color:#fff;min-width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.66rem;flex-shrink:0;padding:0 4px}
+.qtx{flex:1;font-size:.82rem}
+.qtx code{background:#fadbd8;padding:1px 4px;border-radius:3px;font-family:'Fira Code',monospace;font-size:.76rem;color:#c0392b}
+.qtx pre{background:var(--cbg);color:#f8f8f2;padding:8px;border-radius:6px;overflow-x:auto;font-size:.74rem;margin:4px 0}
+.qtx pre code{background:none;color:inherit}
+.qp{background:#fadbd8;color:var(--primary);padding:2px 7px;border-radius:10px;font-size:.64rem;font-weight:600;white-space:nowrap}
+.ans{margin-top:6px}
+.ans textarea{width:100%;min-height:58px;padding:8px;border:2px solid var(--border);border-radius:6px;font-size:.82rem;resize:vertical;font-family:inherit;transition:.3s;user-select:text}
+.ans textarea:focus{outline:none;border-color:var(--primary)}
+.cw{border:2px solid var(--border);border-radius:6px;overflow:hidden;transition:.3s}
+.cw:focus-within{border-color:var(--primary)}
+.cw .CodeMirror{height:auto;min-height:72px;font-size:.76rem}
+.cor{margin-top:8px;padding:10px;border-radius:6px;display:none}
+.cor.show{display:block}
+.cor.cok{background:#eafaf1;border:1px solid #a9dfbf}
+.cor.cko{background:#fdedec;border:1px solid #f5b7b1}
+.cor .ri{font-size:.82rem;font-weight:700;margin-bottom:3px}
+.cor h4{font-size:.68rem;color:var(--tl);margin-bottom:2px;text-transform:uppercase;letter-spacing:.5px}
+.cor .ex{background:#d5f5e3;padding:7px;border-radius:5px;font-family:'Fira Code',monospace;font-size:.72rem;white-space:pre-wrap;margin:2px 0;border:1px solid #a9dfbf}
+.cor .ep{font-size:.76rem;color:var(--tl);margin-top:5px;padding:7px;background:rgba(192,57,43,.04);border-radius:5px;border-left:3px solid var(--primary)}
+.sub{text-align:center;padding:22px 14px;margin-top:10px}
+.btn{padding:9px 18px;border:none;border-radius:7px;font-size:.84rem;font-weight:600;cursor:pointer;transition:.3s;display:inline-flex;align-items:center;gap:5px}
+.bp{background:var(--primary);color:#fff}
+.bp:hover{background:#a93226;transform:translateY(-1px)}
+.bs{background:var(--success);color:#fff}
+.bo{background:transparent;border:2px solid var(--primary);color:var(--primary)}
+.bo:hover{background:var(--primary);color:#fff}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.ov{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;justify-content:center;align-items:center;padding:16px}
+.ov.show{display:flex}
+.mod{background:#fff;border-radius:16px;padding:28px;max-width:480px;width:100%;text-align:center;max-height:90vh;overflow-y:auto;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.mod .gc{width:120px;height:120px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:12px auto;font-size:1.8rem;font-weight:800;color:#fff}
+.ge{background:linear-gradient(135deg,#27ae60,#229954)}.gb{background:linear-gradient(135deg,#2980b9,#3498db)}.gab{background:linear-gradient(135deg,#f39c12,#e67e22)}.gp{background:linear-gradient(135deg,#f1c40f,#f39c12)}.gi{background:linear-gradient(135deg,#c0392b,#e74c3c)}
+.gc small{font-size:.68rem;font-weight:400;opacity:.9}
+.mod .ap{font-size:1rem;font-weight:700;margin:5px 0}
+.mod .pct{font-size:.82rem;color:var(--tl)}
+.esc{text-align:left;margin:12px 0;padding:9px;background:#f8f9fa;border-radius:8px}
+.esc .sr{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)}
+.esc .sr:last-child{border:none}
+.pbr{height:5px;background:#ecf0f1;border-radius:3px;overflow:hidden;margin-top:2px}
+.pbr .fill{height:100%;border-radius:3px;transition:width .8s ease}
+.bg{display:flex;gap:7px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.locked .ans textarea,.locked .CodeMirror{opacity:.7;pointer-events:none}
+/* Anti-cheat overlay */
+.cheat-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(231,76,60,.95);z-index:300;justify-content:center;align-items:center;flex-direction:column;color:#fff;text-align:center;padding:30px}
+.cheat-overlay.show{display:flex}
+.cheat-overlay h2{font-size:1.8rem;margin-bottom:12px}
+.cheat-overlay p{font-size:1rem;max-width:500px;margin-bottom:15px}
+.cheat-overlay .warn-count{font-size:3rem;font-weight:800;background:rgba(255,255,255,.2);width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:10px auto}
+.fullscreen-prompt{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(44,62,80,.97);z-index:250;justify-content:center;align-items:center;flex-direction:column;color:#fff;text-align:center;padding:30px}
+.fullscreen-prompt.show{display:flex}
+.fullscreen-prompt h2{font-size:1.5rem;margin-bottom:10px}
+.fullscreen-prompt p{font-size:.9rem;max-width:450px;margin-bottom:20px;opacity:.9}
+@media(max-width:768px){.hdr-top{flex-direction:column;text-align:center}.tab{padding:8px 9px;font-size:.7rem}.ctn{padding:6px}}
+</style>
+</head>
+<body>
+<!-- FULLSCREEN PROMPT -->
+<div class="fullscreen-prompt show" id="fsPrompt">
+<h2>🔒 Mode Examen — Bac Blanc NSI 2025</h2>
+<p>Pour commencer l'épreuve, vous devez activer le <strong>mode plein écran</strong>. Toute tentative de quitter le plein écran ou de changer d'onglet sera considérée comme une <strong>tentative de triche</strong>.</p>
+<p>⚠️ Après <strong>3 avertissements</strong>, votre copie sera <strong>automatiquement soumise</strong>.</p>
+<button class="btn bp" onclick="startExam()" style="font-size:1.1rem;padding:14px 40px">🚀 Commencer l'épreuve en plein écran</button>
+</div>
+
+<!-- CHEAT WARNING OVERLAY -->
+<div class="cheat-overlay" id="cheatOverlay">
+<h2>⚠️ TENTATIVE DE TRICHE DÉTECTÉE</h2>
+<div class="warn-count" id="warnDisplay">1</div>
+<p>Vous avez quitté la fenêtre d'examen. Ceci est comptabilisé comme un avertissement.</p>
+<p id="cheatMsg">Il vous reste <strong><span id="warnRemain">2</span> avertissement(s)</strong> avant la soumission automatique.</p>
+<button class="btn" onclick="dismissCheatWarning()" style="background:#fff;color:#e74c3c;font-size:1rem;padding:12px 30px;margin-top:10px">Revenir à l'examen</button>
+</div>
+
+<div class="hdr"><div class="hdr-top">
+<div><h1>🏫 Bac Blanc NSI 2025 — École Internationale de Tunis</h1><div class="sub">Numérique et Sciences Informatiques — 3h30</div></div>
+<div class="tmr" id="timerBox"><div class="l">⏱ Temps restant</div><div class="t" id="timerDisplay">03:30:00</div></div>
+<div class="cheat-info">
+<div class="cheat-counter" id="cheatBadge">🛡️ Avertissements : <span id="cheatCount">0</span>/3</div>
+<div class="sv" id="saveInd"><span class="dot"></span> Auto-save</div>
+</div>
+</div></div>
+
+<div class="tabs">
+<button class="tab active" data-tab="0" onclick="switchTab(0)">🗺️ Ex.1 Graphes <span class="b">7pts</span></button>
+<button class="tab" data-tab="1" onclick="switchTab(1)">⚙️ Ex.2 POO/Piles <span class="b">7pts</span></button>
+<button class="tab" data-tab="2" onclick="switchTab(2)">🌳 Ex.3 Arbres <span class="b">6pts</span></button>
+</div>
+
+<div class="ctn" id="mainContainer">
+
+<!-- ===== EXERCICE 1 ===== -->
+<div class="pnl active" id="panel0">
+<div class="exh"><h2>Exercice 1 — Algorithmes sur les graphes</h2><div class="th">Graphes pondérés, parcours DFS/BFS, plus court chemin</div><span class="pb">7 points</span></div>
+<div class="ctx">
+<p>Graphe G1 pondéré non orienté — Sommets : A, B, C, D, E, F</p>
+<table><tr><th>Arête</th><th>Poids</th><th>Arête</th><th>Poids</th><th>Arête</th><th>Poids</th></tr>
+<tr><td>A–B</td><td>7</td><td>B–C</td><td>12</td><td>B–E</td><td>4</td></tr>
+<tr><td>B–F</td><td>16</td><td>C–D</td><td>5</td><td>C–F</td><td>3</td></tr>
+<tr><td>A–D</td><td>15</td><td>D–E</td><td>2</td><td>E–F</td><td>14</td></tr></table>
+</div>
+
+<div class="qc" id="card_e1q1"><div class="qt"><div class="qn">1</div><div class="qtx">Proposer une implémentation en Python du graphe G1 en utilisant un <strong>dictionnaire</strong> (dictionnaire de dictionnaires avec les poids).</div><div class="qp">1 pt</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e1q1" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e1q1"></div></div>
+
+<div class="qc" id="card_e1q2"><div class="qt"><div class="qn">2</div><div class="qtx">Définir la <strong>matrice d'adjacence</strong> <code>m_adj</code> du graphe G1 (ordre A,B,C,D,E,F). Utiliser 0 pour absence d'arête et le poids sinon.</div><div class="qp">1 pt</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e1q2" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e1q2"></div></div>
+
+<div class="qc" id="card_e1q3"><div class="qt"><div class="qn">3</div><div class="qtx">Écrire une fonction <code>mes_voisins(G, s)</code> qui renvoie la liste des voisins adjacents à <code>s</code>.</div><div class="qp">1 pt</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e1q3" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e1q3"></div></div>
+
+<div class="qc" id="card_e1q4"><div class="qt"><div class="qn">4</div><div class="qtx">Compléter la fonction <code>duree_totale(G, ch)</code> :
+<pre><code>def duree_totale(G, ch):
+    duree = 0
+    for i in range(len(ch)......):
+        depart = ch[i]
+        arrivee = ch[i+1]
+        duree += G[......][......]
+    return ............</code></pre>
+<em>Ex: duree_totale(G1, ['A','B','F','E']) → 37</em></div><div class="qp">1 pt</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e1q4" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e1q4"></div></div>
+
+<div class="qc" id="card_e1q5"><div class="qt"><div class="qn">5</div><div class="qtx">Analyse de la fonction <code>parcours</code> (récursive, DFS) :<br>
+<strong>a)</strong> Est-elle récursive ?<br>
+<strong>b)</strong> Parcours en profondeur ou en largeur ?<br>
+<strong>c)</strong> Que renvoie <code>parcours(G1, 'E', [])</code> ?<br>
+<strong>d)</strong> Que renvoie <code>parcours(G1, 'B', [])</code> ?</div><div class="qp">1 pt</div></div>
+<div class="ans"><textarea id="ans_e1q5" placeholder="a) ...&#10;b) ...&#10;c) ...&#10;d) ..." style="min-height:100px"></textarea></div><div class="cor" id="corr_e1q5"></div></div>
+
+<div class="qc" id="card_e1q6"><div class="qt"><div class="qn">6a</div><div class="qtx">Compléter la fonction <code>plus_courte_chaine(G, debut, fin)</code> qui renvoie le tuple (durée minimale, chemin le plus court).
+<pre><code>def plus_courte_chaine(G, debut, fin):
+    chemins = toutes_les_chaines(G, debut, fin, [], [])
+    ........................
+    ........................</code></pre></div><div class="qp">1 pt</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e1q6" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e1q6"></div></div>
+
+<div class="qc" id="card_e1q7"><div class="qt"><div class="qn">6b</div><div class="qtx">Quel sera le résultat de <code>plus_courte_chaine(G1, 'A', 'F')</code> ?</div><div class="qp">0.25 pt</div></div>
+<div class="ans"><textarea id="ans_e1q7" placeholder="Durée et chemin..."></textarea></div><div class="cor" id="corr_e1q7"></div></div>
+
+<div class="qc" id="card_e1q8"><div class="qt"><div class="qn">7</div><div class="qtx">Représenter le musée par un graphe G2 (sommets A-I). Décrire les adjacences.</div><div class="qp">0.5 pt</div></div>
+<div class="ans"><textarea id="ans_e1q8" placeholder="A: [B,D,H], B: [A,C,D], ..." style="min-height:80px"></textarea></div><div class="cor" id="corr_e1q8"></div></div>
+
+<div class="qc" id="card_e1q9"><div class="qt"><div class="qn">8</div><div class="qtx">Proposer un <strong>parcours en largeur</strong> (BFS) du graphe G2 en partant de l'accueil A.</div><div class="qp">0.25 pt</div></div>
+<div class="ans"><textarea id="ans_e1q9" placeholder="Ordre BFS : A, ..."></textarea></div><div class="cor" id="corr_e1q9"></div></div>
+
+<div style="text-align:right;margin-top:8px"><button class="btn bp" onclick="switchTab(1)">Exercice 2 →</button></div>
+</div>
+
+<!-- ===== EXERCICE 2 ===== -->
+<div class="pnl" id="panel1">
+<div class="exh"><h2>Exercice 2 — POO & Structures File/Pile</h2><div class="th">Classe Tache, primitives File et Pile, ordonnancement</div><span class="pb">7 points</span></div>
+
+<div class="ctx">
+<p><strong>Classe Tache</strong> : attributs ID, Nom, START_TIME, END_TIME, Urgente (False par défaut).</p>
+<p><strong>Primitives File :</strong> <code>creer_file_vide()</code>, <code>est_file_vide(f)</code>, <code>enfiler(f, elt)</code>, <code>defiler(f)</code></p>
+<p><strong>Primitives Pile :</strong> <code>creer_pile_vide()</code>, <code>est_pile_vide(p)</code>, <code>empiler(p, elt)</code>, <code>depiler(p)</code></p>
+</div>
+
+<div class="qc" id="card_e2q1"><div class="qt"><div class="qn">I-1</div><div class="qtx">Compléter le <strong>constructeur</strong> <code>__init__</code> de la classe <code>Tache</code>.</div><div class="qp">0.75</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e2q1" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e2q1"></div></div>
+
+<div class="qc" id="card_e2q2"><div class="qt"><div class="qn">I-2</div><div class="qtx">Compléter la méthode <code>Get_Nom(self)</code>.</div><div class="qp">0.25</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e2q2" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e2q2"></div></div>
+
+<div class="qc" id="card_e2q3"><div class="qt"><div class="qn">I-3</div><div class="qtx">Compléter la méthode <code>duree(self)</code> qui renvoie END_TIME - START_TIME.</div><div class="qp">0.5</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e2q3" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e2q3"></div></div>
+
+<div class="qc" id="card_e2q4"><div class="qt"><div class="qn">I-4</div><div class="qtx">Compléter <code>devenir_urgente(self)</code> : rend la tâche urgente uniquement si pas déjà urgente.</div><div class="qp">0.5</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e2q4" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e2q4"></div></div>
+
+<div class="qc" id="card_e2q5"><div class="qt"><div class="qn">M1</div><div class="qtx">Créer la tâche T1 : id=5437, nom='Arrosage', ST=124567, ET=127267.</div><div class="qp">0.5</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e2q5" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e2q5"></div></div>
+
+<div class="qc" id="card_e2q6"><div class="qt"><div class="qn">M2</div><div class="qtx">Rendre T1 urgente (une ligne de code).</div><div class="qp">0.25</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e2q6" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e2q6"></div></div>
+
+<div class="qc" id="card_e2q7"><div class="qt"><div class="qn">M3</div><div class="qtx">Afficher la durée d'exécution de T1.</div><div class="qp">0.5</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e2q7" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e2q7"></div></div>
+
+<div class="qc" id="card_e2q8"><div class="qt"><div class="qn">B1</div><div class="qtx">Compléter <code>partager(Liste_taches)</code> : tâches urgentes → pile P, non urgentes → file F.
+<pre><code>def partager(Liste_taches):
+    P = creer_pile_vide()
+    F = creer_file_vide()
+    for T in Liste_taches:
+        if ...........:
+            ............
+        else:
+            ............
+    return ............</code></pre></div><div class="qp">1</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e2q8" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e2q8"></div></div>
+
+<div class="qc" id="card_e2q9"><div class="qt"><div class="qn">B2</div><div class="qtx">Écrire <code>Fin(P, F)</code> : renvoie True si P et F sont vides.</div><div class="qp">0.5</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e2q9" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e2q9"></div></div>
+
+<div class="qc" id="card_e2q10"><div class="qt"><div class="qn">B3</div><div class="qtx">Écrire <code>Executer(P, F)</code> : renvoie la prochaine tâche (priorité aux urgentes via pile).</div><div class="qp">1</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e2q10" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e2q10"></div></div>
+
+<div class="qc" id="card_e2q11"><div class="qt"><div class="qn">B4</div><div class="qtx">Compléter <code>traiter(Liste_taches)</code> :
+<pre><code>def traiter(Liste_taches):
+    P, F = ...............
+    D = 0
+    while not ...........:
+        T = ...............
+        print(.............)
+        D += ...............
+    return D</code></pre></div><div class="qp">1.25</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e2q11" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e2q11"></div></div>
+
+<div style="display:flex;justify-content:space-between;margin-top:8px"><button class="btn bo" onclick="switchTab(0)">← Ex.1</button><button class="btn bp" onclick="switchTab(2)">Ex.3 →</button></div>
+</div>
+
+<!-- ===== EXERCICE 3 ===== -->
+<div class="pnl" id="panel2">
+<div class="exh"><h2>Exercice 3 — Arbre binaire (arborescence de fichiers)</h2><div class="th">Classe Noeud, parcours préfixe/infixe/suffixe/largeur</div><span class="pb">6 points</span></div>
+
+<div class="ctx">
+<p>Arborescence du projet <code>mon_projet</code> modélisée par un arbre binaire avec la classe <code>Noeud</code>.</p>
+<pre><code>class Noeud:
+    def __init__(self, nom, type='fichier'):
+        self.nom = nom
+        self.type = type  # 'fichier' ou 'repertoire'
+        self.fils = {'gauche': None, 'droit': None}
+    def fg(self): return self.fils['gauche']
+    def fd(self): return self.fils['droit']
+    def est_feuille(self): return self.fg()==None and self.fd()==None
+    def ajouter_a_gauche(self, n): ...
+    def ajouter_a_droite(self, n): ...
+    def hauteur(self): ...
+    def prefixe_noms(self, lst): ...
+    def prefixe_noeuds(self, lst): ...</code></pre>
+<p><strong>Structure :</strong> mon_projet → gauche:web, droite:application.py. web → gauche:templates, droite:static. templates → gauche:index.html. static → gauche:css, droite:js. css → gauche:style.css. js → droite:script.js.</p>
+</div>
+
+<div class="qc" id="card_e3q1"><div class="qt"><div class="qn">1</div><div class="qtx">Compléter le code pour construire l'arborescence (les liaisons manquantes après <code>mon_projet.ajouter_a_gauche(web)</code> et <code>mon_projet.ajouter_a_droite(application)</code>).</div><div class="qp">1</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e3q1" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e3q1"></div></div>
+
+<div class="qc" id="card_e3q2"><div class="qt"><div class="qn">2</div><div class="qtx">Quelle est la <strong>taille</strong> et la <strong>hauteur</strong> de l'arbre <code>mon_projet</code> ?</div><div class="qp">0.5</div></div>
+<div class="ans"><textarea id="ans_e3q2" placeholder="Taille = ...&#10;Hauteur = ..."></textarea></div><div class="cor" id="corr_e3q2"></div></div>
+
+<div class="qc" id="card_e3q3"><div class="qt"><div class="qn">3</div><div class="qtx">Que renvoie l'appel <code>mon_projet.prefixe_noms([])</code> ?</div><div class="qp">0.5</div></div>
+<div class="ans"><textarea id="ans_e3q3" placeholder="['mon_projet', ...]" style="min-height:50px"></textarea></div><div class="cor" id="corr_e3q3"></div></div>
+
+<div class="qc" id="card_e3q4"><div class="qt"><div class="qn">4</div><div class="qtx">Donner les noms des nœuds dans les parcours <strong>infixe</strong>, <strong>suffixe</strong> et <strong>en largeur</strong>.</div><div class="qp">0.75</div></div>
+<div class="ans"><textarea id="ans_e3q4" placeholder="Infixe: ...&#10;Suffixe: ...&#10;Largeur: ..." style="min-height:80px"></textarea></div><div class="cor" id="corr_e3q4"></div></div>
+
+<div class="qc" id="card_e3q5"><div class="qt"><div class="qn">5</div><div class="qtx">Écrire les méthodes <code>fichiers(self)</code>, <code>repertoires(self)</code>, <code>nombre_fichiers(self)</code>, <code>nombre_repertoires(self)</code> et <code>taille(self)</code>. <em>Utiliser <code>prefixe_noeuds</code>.</em></div><div class="qp">1.25</div></div>
+<div class="ans"><div class="cw"><textarea id="ans_e3q5" class="code-editor" data-mode="python"></textarea></div></div><div class="cor" id="corr_e3q5"></div></div>
+
+<div class="qc" id="card_e3q6"><div class="qt"><div class="qn">6</div><div class="qtx">Quelles sont les valeurs retournées par <code>largeur1(mon_projet)</code> et <code>largeur2(mon_projet)</code> ? Expliquer le rôle de chacune.</div><div class="qp">2</div></div>
+<div class="ans"><textarea id="ans_e3q6" placeholder="largeur1 renvoie : ...&#10;largeur2 renvoie : ...&#10;Rôle largeur1 : ...&#10;Rôle largeur2 : ..." style="min-height:120px"></textarea></div><div class="cor" id="corr_e3q6"></div></div>
+
+<div style="text-align:left;margin-top:8px"><button class="btn bo" onclick="switchTab(1)">← Ex.2</button></div>
+</div>
+
+<!-- SUBMIT -->
+<div class="sub"><div style="max-width:400px;margin:0 auto;padding:20px;background:var(--card);border-radius:var(--rad);box-shadow:var(--sh)">
+<h2 style="margin-bottom:5px;font-size:1rem">📩 Soumettre ma copie</h2>
+<p style="color:var(--tl);font-size:.78rem;margin-bottom:12px">Les réponses seront verrouillées et la correction affichée.</p>
+<button class="btn bp" id="submitBtn" onclick="submitExam()" style="font-size:.95rem;padding:11px 28px">📝 Soumettre</button>
+</div></div>
+</div>
+
+<!-- RESULTS -->
+<div class="ov" id="resultsOverlay"><div class="mod"><h2>📊 Résultats</h2>
+<div class="gc" id="gradeCircle"><span id="gradeNote">--</span><small>/20</small></div>
+<div class="ap" id="appreciation">--</div><div class="pct" id="percentage">--</div>
+<div class="esc" id="exerciseScores"></div>
+<div class="bg"><button class="btn bp" onclick="closeResults()">📋 Correction</button><button class="btn bs" onclick="exportPDF()">📄 PDF</button></div>
+</div></div>
+
+<script>
+// ========== ANTI-CHEAT SYSTEM ==========
+let cheatWarnings=0;
+const MAX_WARNINGS=3;
+let examStarted=false;
+
+function startExam(){
+document.getElementById('fsPrompt').classList.remove('show');
+const el=document.documentElement;
+if(el.requestFullscreen)el.requestFullscreen();
+else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();
+else if(el.msRequestFullscreen)el.msRequestFullscreen();
+examStarted=true;
+startTimer();
+}
+
+// Detect tab visibility change
+document.addEventListener('visibilitychange',()=>{
+if(!examStarted||isSubmitted)return;
+if(document.hidden)triggerCheatWarning('Changement d\'onglet détecté');
+});
+
+// Detect window blur
+window.addEventListener('blur',()=>{
+if(!examStarted||isSubmitted)return;
+triggerCheatWarning('Fenêtre d\'examen quittée');
+});
+
+// Detect fullscreen exit
+document.addEventListener('fullscreenchange',()=>{
+if(!examStarted||isSubmitted)return;
+if(!document.fullscreenElement)triggerCheatWarning('Sortie du plein écran');
+});
+
+// Prevent right-click
+document.addEventListener('contextmenu',e=>{if(examStarted&&!isSubmitted)e.preventDefault()});
+
+// Prevent common shortcuts
+document.addEventListener('keydown',e=>{
+if(!examStarted||isSubmitted)return;
+if((e.ctrlKey||e.metaKey)&&['t','n','w','Tab'].includes(e.key)){e.preventDefault();triggerCheatWarning('Raccourci clavier interdit');}
+if(e.key==='F12'){e.preventDefault();triggerCheatWarning('DevTools interdit');}
+if((e.ctrlKey||e.metaKey)&&e.shiftKey&&['I','J','C'].includes(e.key.toUpperCase())){e.preventDefault();triggerCheatWarning('DevTools interdit');}
+});
+
+function triggerCheatWarning(reason){
+if(isSubmitted)return;
+cheatWarnings++;
+document.getElementById('cheatCount').textContent=cheatWarnings;
+const badge=document.getElementById('cheatBadge');
+badge.classList.add('alert');
+setTimeout(()=>badge.classList.remove('alert'),3000);
+if(cheatWarnings>=MAX_WARNINGS){
+forceSubmit(reason);
+return;
+}
+document.getElementById('warnDisplay').textContent=cheatWarnings;
+document.getElementById('warnRemain').textContent=MAX_WARNINGS-cheatWarnings;
+document.getElementById('cheatOverlay').classList.add('show');
+}
+
+function dismissCheatWarning(){
+document.getElementById('cheatOverlay').classList.remove('show');
+const el=document.documentElement;
+if(!document.fullscreenElement){
+if(el.requestFullscreen)el.requestFullscreen();
+}
+}
+
+function forceSubmit(reason){
+document.getElementById('cheatOverlay').classList.remove('show');
+alert(`🚫 SOUMISSION AUTOMATIQUE\n\nRaison : ${reason}\nNombre d'avertissements : ${cheatWarnings}/${MAX_WARNINGS}\n\nVotre copie a été soumise automatiquement.`);
+submitExam(true);
+}
+
+// ========== EXAM DATA ==========
+const ED=[
+{title:"Ex.1 Graphes",points:7,questions:[
+{id:"e1q1",pts:1,type:"code",answer:`G1 = {\n    'A': {'B': 7, 'D': 15},\n    'B': {'A': 7, 'C': 12, 'E': 4, 'F': 16},\n    'C': {'B': 12, 'D': 5, 'F': 3},\n    'D': {'A': 15, 'C': 5, 'E': 2},\n    'E': {'B': 4, 'D': 2, 'F': 14},\n    'F': {'B': 16, 'C': 3, 'E': 14}\n}`,keywords:["'A'","'B'","'C'","'D'","'E'","'F'","7","15","12","4","16","5","3","2","14"],explanation:"Dictionnaire de dictionnaires : chaque clé est un sommet, sa valeur est un dictionnaire {voisin: poids}. Le graphe étant non orienté, chaque arête apparaît dans les deux sens."},
+{id:"e1q2",pts:1,type:"code",answer:`m_adj = [\n    [0, 7, 0, 15, 0, 0],\n    [7, 0, 12, 0, 4, 16],\n    [0, 12, 0, 5, 0, 3],\n    [15, 0, 5, 0, 2, 0],\n    [0, 4, 0, 2, 0, 14],\n    [0, 16, 3, 0, 14, 0]\n]`,keywords:["0, 7, 0, 15","7, 0, 12, 0, 4, 16","0, 12, 0, 5, 0, 3","15, 0, 5, 0, 2","0, 4, 0, 2, 0, 14","0, 16, 3, 0, 14, 0"],explanation:"Matrice 6×6 symétrique. 0 signifie pas d'arête, sinon le poids. La diagonale est nulle."},
+{id:"e1q3",pts:1,type:"code",answer:`def mes_voisins(G, s):\n    return list(G[s].keys())`,keywords:["mes_voisins","G[s]","keys","list","return"],explanation:"On renvoie la liste des clés du dictionnaire G[s], qui sont les voisins de s."},
+{id:"e1q4",pts:1,type:"code",answer:`def duree_totale(G, ch):\n    duree = 0\n    for i in range(len(ch) - 1):\n        depart = ch[i]\n        arrivee = ch[i+1]\n        duree += G[depart][arrivee]\n    return duree`,keywords:["- 1","len(ch) - 1","G[depart][arrivee]","depart","arrivee","return duree"],explanation:"On parcourt la chaîne par paires consécutives. range(len(ch)-1) évite le dépassement d'indice. G[depart][arrivee] donne le poids de l'arête."},
+{id:"e1q5",pts:1,type:"text",answer:"a) Oui, la fonction est récursive (elle s'appelle elle-même).\nb) Parcours en profondeur (DFS).\nc) parcours(G1,'E',[]) → ['E','B','A','D','C','F']\nd) parcours(G1,'B',[]) → ['B','A','D','C','F','E']",keywords:["récursive","oui","profondeur","DFS","E","B","A","D","C","F"],explanation:"La fonction s'appelle récursivement. Elle explore en profondeur : on va le plus loin possible avant de revenir en arrière."},
+{id:"e1q6",pts:1,type:"code",answer:`def plus_courte_chaine(G, debut, fin):\n    chemins = toutes_les_chaines(G, debut, fin, [], [])\n    return min(chemins)`,keywords:["plus_courte_chaine","toutes_les_chaines","min","chemins","return"],explanation:"min() compare les tuples par leur premier élément (durée), donc renvoie le chemin de durée minimale."},
+{id:"e1q7",pts:.25,type:"text",answer:"21 ['A', 'B', 'E', 'D', 'C', 'F']",keywords:["21","A","B","E","D","C","F"],explanation:"Le chemin A→B→E→D→C→F a un coût de 7+4+2+5+3 = 21, qui est le minimum."},
+{id:"e1q8",pts:.5,type:"text",answer:"G2 : A:[B,D,H], B:[A,C,D], C:[B,E,F], D:[A,B,E,H], E:[C,D,F,H,I], F:[C,E,G], G:[F], H:[A,D,E,I], I:[E,H]",keywords:["A","B","C","D","E","F","G","H","I"],explanation:"On déduit les adjacences des portes visibles sur le plan du musée."},
+{id:"e1q9",pts:.25,type:"text",answer:"A, B, D, H, C, E, I, F, G",keywords:["A","B","D","H","C","E","I","F","G"],explanation:"Parcours en largeur : on visite niveau par niveau. Niveau 0: A. Niveau 1: B,D,H. Niveau 2: C,E,I. Niveau 3: F. Niveau 4: G."}
+]},
+{title:"Ex.2 POO/Piles",points:7,questions:[
+{id:"e2q1",pts:.75,type:"code",answer:`def __init__(self, id, nom, ST, ET):\n    self.ID = id\n    self.Nom = nom\n    self.START_TIME = ST\n    self.END_TIME = ET\n    self.Urgente = False`,keywords:["self.ID","self.Nom","self.START_TIME","self.END_TIME","self.Urgente","False"],explanation:"On initialise les 5 attributs. Urgente est toujours False à la création."},
+{id:"e2q2",pts:.25,type:"code",answer:`def Get_Nom(self):\n    return self.Nom`,keywords:["Get_Nom","return","self.Nom"],explanation:"Simple accesseur qui renvoie l'attribut Nom."},
+{id:"e2q3",pts:.5,type:"code",answer:`def duree(self):\n    return self.END_TIME - self.START_TIME`,keywords:["duree","return","self.END_TIME","self.START_TIME","-"],explanation:"La durée est la différence entre l'heure de fin et l'heure de début."},
+{id:"e2q4",pts:.5,type:"code",answer:`def devenir_urgente(self):\n    if not self.Urgente:\n        self.Urgente = True`,keywords:["devenir_urgente","not self.Urgente","self.Urgente","True","if"],explanation:"On vérifie d'abord que la tâche n'est pas déjà urgente avant de la rendre urgente."},
+{id:"e2q5",pts:.5,type:"code",answer:`T1 = Tache(5437, 'Arrosage', 124567, 127267)`,keywords:["T1","Tache","5437","Arrosage","124567","127267"],explanation:"On instancie la classe Tache avec les 4 paramètres : id, nom, ST, ET."},
+{id:"e2q6",pts:.25,type:"code",answer:`T1.devenir_urgente()`,keywords:["T1","devenir_urgente"],explanation:"On appelle la méthode devenir_urgente() sur l'objet T1."},
+{id:"e2q7",pts:.5,type:"code",answer:`print(T1.duree())`,keywords:["print","T1","duree","()"],explanation:"On appelle la méthode duree() et on affiche le résultat : 127267-124567 = 2700."},
+{id:"e2q8",pts:1,type:"code",answer:`def partager(Liste_taches):\n    P = creer_pile_vide()\n    F = creer_file_vide()\n    for T in Liste_taches:\n        if T.Urgente:\n            empiler(P, T)\n        else:\n            enfiler(F, T)\n    return P, F`,keywords:["partager","T.Urgente","empiler","P","enfiler","F","return P, F","return (P, F)"],explanation:"On teste l'attribut Urgente de chaque tâche : si True → pile (LIFO), si False → file (FIFO)."},
+{id:"e2q9",pts:.5,type:"code",answer:`def Fin(P, F):\n    return est_pile_vide(P) and est_file_vide(F)`,keywords:["Fin","est_pile_vide","est_file_vide","and","return"],explanation:"Les tâches sont terminées quand les deux structures sont vides."},
+{id:"e2q10",pts:1,type:"code",answer:`def Executer(P, F):\n    if not est_pile_vide(P):\n        return depiler(P)\n    else:\n        return defiler(F)`,keywords:["Executer","not est_pile_vide","depiler","defiler","return"],explanation:"Priorité aux tâches urgentes (pile). Si la pile est vide, on défile la file des tâches non urgentes."},
+{id:"e2q11",pts:1.25,type:"code",answer:`def traiter(Liste_taches):\n    P, F = partager(Liste_taches)\n    D = 0\n    while not Fin(P, F):\n        T = Executer(P, F)\n        print(T.Get_Nom())\n        D += T.duree()\n    return D`,keywords:["partager","Liste_taches","Fin(P, F)","Executer(P, F)","T.Get_Nom","T.duree","return D"],explanation:"On partage, puis tant qu'il reste des tâches, on exécute la prochaine, on affiche son nom et on accumule la durée."}
+]},
+{title:"Ex.3 Arbres",points:6,questions:[
+{id:"e3q1",pts:1,type:"code",answer:`web.ajouter_a_gauche(templates)\nweb.ajouter_a_droite(static)\ntemplates.ajouter_a_gauche(index)\nstatic.ajouter_a_gauche(css)\nstatic.ajouter_a_droite(js)\ncss.ajouter_a_gauche(style)\njs.ajouter_a_droite(script)`,keywords:["web.ajouter_a_gauche(templates)","web.ajouter_a_droite(static)","templates.ajouter_a_gauche(index)","static.ajouter_a_gauche(css)","static.ajouter_a_droite(js)","css.ajouter_a_gauche(style)","js.ajouter_a_droite(script)"],explanation:"On ajoute chaque nœud enfant au bon parent, à gauche ou à droite, selon l'arborescence du projet."},
+{id:"e3q2",pts:.5,type:"text",answer:"Taille = 10 (10 nœuds)\nHauteur = 4 (chemin le plus long : mon_projet→web→static→js→script)",keywords:["10","4","taille","hauteur"],explanation:"10 nœuds au total. La hauteur est la longueur du plus long chemin racine→feuille = 4 arêtes."},
+{id:"e3q3",pts:.5,type:"text",answer:"['mon_projet', 'web', 'templates', 'index', 'static', 'css', 'style', 'js', 'script', 'application']",keywords:["mon_projet","web","templates","index","static","css","style","js","script","application"],explanation:"Parcours préfixe (Racine, Gauche, Droite) : on visite la racine, puis le sous-arbre gauche entièrement, puis le droit."},
+{id:"e3q4",pts:.75,type:"text",answer:"Infixe: index, templates, web, style, css, static, js, script, mon_projet, application\nSuffixe: index, templates, style, css, script, js, static, web, application, mon_projet\nLargeur: mon_projet, web, application, templates, static, index, css, js, style, script",keywords:["infixe","suffixe","largeur","index","templates","web","style","css","static","js","script","mon_projet","application"],explanation:"Infixe (G,R,D), Suffixe (G,D,R), Largeur (niveau par niveau)."},
+{id:"e3q5",pts:1.25,type:"code",answer:`def fichiers(self):\n    noeuds = self.prefixe_noeuds([])\n    return [n.nom for n in noeuds if n.type == 'fichier']\n\ndef repertoires(self):\n    noeuds = self.prefixe_noeuds([])\n    return [n.nom for n in noeuds if n.type == 'repertoire']\n\ndef nombre_fichiers(self):\n    return len(self.fichiers())\n\ndef nombre_repertoires(self):\n    return len(self.repertoires())\n\ndef taille(self):\n    return len(self.prefixe_noeuds([]))`,keywords:["fichiers","repertoires","prefixe_noeuds","n.type","fichier","repertoire","len","nombre_fichiers","nombre_repertoires","taille"],explanation:"On utilise prefixe_noeuds pour obtenir tous les nœuds, puis on filtre par type. La taille est simplement le nombre total de nœuds."},
+{id:"e3q6",pts:2,type:"text",answer:"largeur1 renvoie la liste de toutes les branches (chemins racine→feuille) :\n[['mon_projet','application'], ['mon_projet','web','templates','index'], ['mon_projet','web','static','css','style'], ['mon_projet','web','static','js','script']]\n\nlargeur2 renvoie tous les nœuds avec leur profondeur :\n[('mon_projet',0), ('web',1), ('application',1), ('templates',2), ('static',2), ('index',3), ('css',3), ('js',3), ('style',4), ('script',4)]\n\nRôle largeur1 : liste tous les chemins complets de la racine vers chaque feuille.\nRôle largeur2 : liste chaque nœud avec sa profondeur dans l'arbre (parcours BFS).",keywords:["branches","chemins","feuille","profondeur","BFS","largeur","racine","application","index","style","script","mon_projet","web"],explanation:"largeur1 construit les chemins racine→feuille. largeur2 associe à chaque nœud sa profondeur dans l'arbre."}
+]}];
+
+// ========== ENGINE ==========
+let editors={},timerInterval,remainingSeconds=3*3600+30*60,isSubmitted=false;
+const SK='nsi_bacblanc_2025';
+document.addEventListener('DOMContentLoaded',()=>{initEditors();loadState();setInterval(autoSave,20000)});
+function initEditors(){document.querySelectorAll('.code-editor').forEach(ta=>{const cm=CodeMirror.fromTextArea(ta,{mode:'python',theme:'dracula',lineNumbers:true,indentUnit:4,tabSize:4,indentWithTabs:false,lineWrapping:true,matchBrackets:true,extraKeys:{"Tab":cm=>{cm.replaceSelection("    ","end")}}});editors[ta.id]=cm;cm.setSize(null,'auto');cm.on('change',()=>cm.setSize(null,'auto'))})}
+function startTimer(){updateTimer();timerInterval=setInterval(()=>{if(isSubmitted){clearInterval(timerInterval);return}remainingSeconds--;if(remainingSeconds<=0){remainingSeconds=0;clearInterval(timerInterval);forceSubmit('Temps écoulé')}updateTimer()},1000)}
+function updateTimer(){const h=Math.floor(remainingSeconds/3600),m=Math.floor((remainingSeconds%3600)/60),s=remainingSeconds%60;document.getElementById('timerDisplay').textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;const b=document.getElementById('timerBox');b.classList.remove('w','d');if(remainingSeconds<600)b.classList.add('d');else if(remainingSeconds<1800)b.classList.add('w')}
+function switchTab(i){document.querySelectorAll('.pnl').forEach((p,j)=>p.classList.toggle('active',j===i));document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',j===i));window.scrollTo({top:0,behavior:'smooth'})}
+function autoSave(){if(isSubmitted)return;const d={time:remainingSeconds,cheats:cheatWarnings,a:{}};ED.forEach(ex=>ex.questions.forEach(q=>{if(editors[`ans_${q.id}`])d.a[q.id]=editors[`ans_${q.id}`].getValue();else{const el=document.getElementById(`ans_${q.id}`);if(el)d.a[q.id]=el.value}}));localStorage.setItem(SK,JSON.stringify(d));document.getElementById('saveInd').innerHTML='<span class="dot" style="background:#27ae60"></span> '+new Date().toLocaleTimeString()}
+function loadState(){const r=localStorage.getItem(SK);if(!r)return;try{const d=JSON.parse(r);if(d.time)remainingSeconds=d.time;if(d.cheats){cheatWarnings=d.cheats;document.getElementById('cheatCount').textContent=cheatWarnings}updateTimer();if(d.a)Object.keys(d.a).forEach(q=>{if(editors[`ans_${q}`])editors[`ans_${q}`].setValue(d.a[q]);else{const el=document.getElementById(`ans_${q}`);if(el)el.value=d.a[q]}})}catch(e){}}
+function getA(q){if(editors[`ans_${q}`])return editors[`ans_${q}`].getValue().trim();const el=document.getElementById(`ans_${q}`);return el?el.value.trim():''}
+function norm(s){return s.toLowerCase().replace(/[''"`]/g,"'").replace(/\s+/g,' ').replace(/[àâä]/g,'a').replace(/[éèêë]/g,'e').replace(/[îï]/g,'i').replace(/[ôö]/g,'o').replace(/[ùûü]/g,'u').replace(/ç/g,'c').trim()}
+function grade(q){const a=getA(q.id);if(!a)return{score:0,max:q.pts,correct:false};const na=norm(a);let m=0;const kw=q.keywords.map(k=>norm(k));kw.forEach(k=>{if(na.includes(k))m++});const r=m/kw.length;let sc;if(r>=.6)sc=q.pts;else if(r>=.35)sc=q.pts*.5;else if(r>=.15)sc=q.pts*.25;else sc=0;sc=Math.round(sc*4)/4;return{score:sc,max:q.pts,correct:sc>=q.pts*.55}}
+function submitExam(forced=false){if(isSubmitted)return;if(!forced&&!confirm('📝 Soumettre votre copie ? Elle sera verrouillée.'))return;isSubmitted=true;clearInterval(timerInterval);document.getElementById('submitBtn').disabled=true;document.getElementById('submitBtn').textContent='✅ Soumise';document.querySelectorAll('.ans textarea').forEach(t=>t.readOnly=true);Object.values(editors).forEach(cm=>cm.setOption('readOnly',true));document.querySelectorAll('.qc').forEach(c=>c.classList.add('locked'));
+if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});
+let ts=0,tm=0,exS=[];ED.forEach((ex,ei)=>{let xs=0,xm=0;ex.questions.forEach(q=>{const r=grade(q);xs+=r.score;xm+=r.max;ts+=r.score;tm+=r.max;showCorr(q,r)});exS.push({title:ex.title,score:xs,max:xm,idx:ei});const tab=document.querySelector(`.tab[data-tab="${ei}"] .b`);if(tab){tab.textContent=`${xs.toFixed(1)}/${xm}`;if(xs>=xm*.5)tab.parentElement.classList.add('done')}});showResults(ts,tm,exS)}
+function showCorr(q,r){const c=document.getElementById(`card_${q.id}`),co=document.getElementById(`corr_${q.id}`);if(!c||!co)return;c.classList.add(r.correct?'ok':'ko');const i=r.correct?'✅':(r.score>0?'⚠️':'❌');co.className=`cor show ${r.correct?'cok':'cko'}`;co.innerHTML=`<div class="ri">${i} ${r.score}/${r.max}pt</div><h4>📌 Attendu:</h4><div class="ex">${esc(q.answer)}</div><div class="ep">💡 ${q.explanation}</div>`}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function showResults(t,m,exS){const n=Math.round((t/m)*20*4)/4,p=Math.round((t/m)*100);let ap,gc;if(n>=16){ap='🏆 Excellent';gc='ge'}else if(n>=14){ap='👏 Bien';gc='gb'}else if(n>=12){ap='👍 Assez bien';gc='gab'}else if(n>=10){ap='✊ Passable';gc='gp'}else{ap='📚 Insuffisant';gc='gi'}document.getElementById('gradeCircle').className=`gc ${gc}`;document.getElementById('gradeNote').textContent=n.toFixed(2);document.getElementById('appreciation').textContent=ap;let cheatNote=cheatWarnings>0?` | ⚠️ ${cheatWarnings} avertissement(s) de triche`:'';document.getElementById('percentage').textContent=`${p}% — ${t.toFixed(2)}/${m}pts → ${n.toFixed(2)}/20${cheatNote}`;let h='';exS.forEach(e=>{const p2=Math.round((e.score/e.max)*100),c=p2>=55?'#27ae60':p2>=30?'#f39c12':'#c0392b';h+=`<div class="sr"><div><strong>${e.title}</strong><div class="pbr"><div class="fill" style="width:${p2}%;background:${c}"></div></div></div><div style="font-weight:700;color:${c}">${e.score.toFixed(2)}/${e.max}</div></div>`});document.getElementById('exerciseScores').innerHTML=h;document.getElementById('resultsOverlay').classList.add('show')}
+function closeResults(){document.getElementById('resultsOverlay').classList.remove('show');switchTab(0)}
+function exportPDF(){closeResults();document.querySelectorAll('.pnl').forEach(p=>p.style.display='block');html2pdf().set({margin:6,filename:`BacBlanc_NSI_2025_${cheatWarnings>0?'TRICHE_'+cheatWarnings+'_':''}Copie.pdf`,image:{type:'jpeg',quality:.9},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(document.getElementById('mainContainer')).save().then(()=>document.querySelectorAll('.pnl').forEach(p=>p.style.display=''))}
+</script>
+</body>
+</html>
+| **Export PDF** | Mentionne le nombre de tentatives de triche dans le nom du fichier |
